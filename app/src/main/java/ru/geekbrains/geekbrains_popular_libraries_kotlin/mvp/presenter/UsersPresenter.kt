@@ -36,9 +36,15 @@ class UsersPresenter(val usersRepo: GithubUsersRepo, val router: Router, val scr
     }
 
     fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
-        viewState.updateList()
+        val observable = usersRepo.getUsers()
+        observable.subscribe({users ->
+            usersListPresenter.users.addAll(users)
+            viewState.updateList()
+        }, {
+            it.printStackTrace()
+        }, {})
+
+
     }
 
     fun backPressed(): Boolean {
